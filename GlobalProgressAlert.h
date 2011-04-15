@@ -37,6 +37,11 @@
 + (void)fadeOutAfter:(double)secs;
 
 /**
+ * Displays the alert zooming it up
+ **/
++ (void)show:(NSString*)text andZoomUpOver:(double)secs;
+
+/**
  * Sets the background color
  **/
 + (void)setBackgroundColor:(UIColor*)color;

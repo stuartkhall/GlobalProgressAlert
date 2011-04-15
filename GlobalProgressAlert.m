@@ -105,22 +105,40 @@ static int const LARGE_ACTIVITY_SIZE = 36;
 **/
 + (void)show:(NSString*)text {
     GlobalProgressAlert* instance = [GlobalProgressAlert sharedInstance];
+    
     [instance.roundView removeFromSuperview];
     
 	instance.roundView.center = [self mainWindow].center;
 	instance.label.text = text;
 	instance.roundView.alpha = 1;
 	instance.roundView.hidden = NO;
+    [instance.roundView setNeedsDisplay];
     
     [[self mainWindow] addSubview:instance.roundView];
+    [[self mainWindow] bringSubviewToFront:instance.roundView];
 }
 
 /**
  * Displays the alert with the specific string and fades out
  **/
 + (void)show:(NSString*)text andFadeOutAfter:(double)secs {
-    [GlobalPopupAlert show:text];
-    [GlobalPopupAlert fadeOutAfter:secs];
+    [GlobalProgressAlert show:text];
+    [GlobalProgressAlert fadeOutAfter:secs];
+}
+
+/**
+ * Displays the alert zooming it up
+ **/
++ (void)show:(NSString*)text andZoomUpOver:(double)secs {
+    GlobalProgressAlert* instance = [GlobalProgressAlert sharedInstance];
+    instance.roundView.transform = CGAffineTransformMakeScale(0.1, 0.1);
+
+    [GlobalProgressAlert show:text];
+    
+    [UIView beginAnimations:nil context:nil];
+    [UIView setAnimationDuration:secs];
+    instance.roundView.transform = CGAffineTransformMakeScale(1.0, 1.0);
+    [UIView commitAnimations];
 }
 
 /**
