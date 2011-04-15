@@ -1,0 +1,11 @@
+Provides a popup loading alert.
+
+Requires the QuartzCore framework
+
+example:
+
+#import "GlobalProgressAlert.h"
+
+...
+
+[GlobalProgressAlert show:@"Loading"];
