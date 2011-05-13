@@ -127,17 +127,33 @@ static int const LARGE_ACTIVITY_SIZE = 36;
 }
 
 /**
+ * Determines the transformation for the current orientation
+ **/
+- (CGAffineTransform)transformForOrientation {
+    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+    if (orientation == UIInterfaceOrientationLandscapeLeft) {
+        return CGAffineTransformMakeRotation(M_PI*1.5);
+    } else if (orientation == UIInterfaceOrientationLandscapeRight) {
+        return CGAffineTransformMakeRotation(M_PI/2);
+    } else if (orientation == UIInterfaceOrientationPortraitUpsideDown) {
+        return CGAffineTransformMakeRotation(-M_PI);
+    } else {
+        return CGAffineTransformIdentity;
+    }
+}
+
+/**
  * Displays the alert zooming it up
  **/
 + (void)show:(NSString*)text andZoomUpOver:(double)secs {
     GlobalProgressAlert* instance = [GlobalProgressAlert sharedInstance];
-    instance.roundView.transform = CGAffineTransformMakeScale(0.1, 0.1);
+    instance.roundView.transform = CGAffineTransformScale([instance transformForOrientation], 0.1, 0.1);
 
     [GlobalProgressAlert show:text];
     
     [UIView beginAnimations:nil context:nil];
     [UIView setAnimationDuration:secs];
-    instance.roundView.transform = CGAffineTransformMakeScale(1.0, 1.0);
+    instance.roundView.transform = CGAffineTransformScale([instance transformForOrientation], 1.0, 1.0);
     [UIView commitAnimations];
 }
 
@@ -173,22 +189,6 @@ static int const LARGE_ACTIVITY_SIZE = 36;
  **/
 + (void)setLabelColor:(UIColor*)color {
     [GlobalProgressAlert sharedInstance].label.textColor = color;
-}
-
-/**
- * Determines the transformation for the current orientation
- **/
-- (CGAffineTransform)transformForOrientation {
-    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
-    if (orientation == UIInterfaceOrientationLandscapeLeft) {
-        return CGAffineTransformMakeRotation(M_PI*1.5);
-    } else if (orientation == UIInterfaceOrientationLandscapeRight) {
-        return CGAffineTransformMakeRotation(M_PI/2);
-    } else if (orientation == UIInterfaceOrientationPortraitUpsideDown) {
-        return CGAffineTransformMakeRotation(-M_PI);
-    } else {
-        return CGAffineTransformIdentity;
-    }
 }
 
 /**
